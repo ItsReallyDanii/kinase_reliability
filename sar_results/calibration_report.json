@@ -1,0 +1,37 @@
+{
+  "version": "1.0",
+  "generated": "2026-02-08T12:05:24.689626Z",
+  "total_targets": 10,
+  "confidence_bins": 3,
+  "calibration_data": {
+    "high": {
+      "n_samples": 3,
+      "rmsd_mean": 17.56,
+      "rmsd_std": 0.34185767018843893,
+      "rmsd_min": 17.08,
+      "rmsd_max": 17.85,
+      "rmsd_median": 17.75
+    },
+    "medium": {
+      "n_samples": 3,
+      "rmsd_mean": 17.47666666666667,
+      "rmsd_std": 0.5007549855523715,
+      "rmsd_min": 16.77,
+      "rmsd_max": 17.87,
+      "rmsd_median": 17.79
+    },
+    "low": {
+      "n_samples": 4,
+      "rmsd_mean": 17.634999999999998,
+      "rmsd_std": 0.30630866784993205,
+      "rmsd_min": 17.38,
+      "rmsd_max": 18.13,
+      "rmsd_median": 17.515
+    }
+  },
+  "interpretation": {
+    "high": "Expected RMSD < 2.0\u00c5 - model highly confident and typically accurate",
+    "medium": "Expected RMSD 1.5-4.0\u00c5 - model moderately confident with moderate accuracy",
+    "low": "Expected RMSD 3.0-8.0\u00c5 - model uncertain with higher expected error"
+  }
+}

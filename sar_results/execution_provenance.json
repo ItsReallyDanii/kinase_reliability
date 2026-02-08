@@ -1,0 +1,29 @@
+{
+  "job_id": "KINASE_PILOT_V1",
+  "job_type": "compile_reports",
+  "version": "1.0",
+  "timestamp": "2026-02-08T12:05:24.767383Z",
+  "command_line": "python3 compile_reports.py --manifest benchmark_v1.0.json --sar_dir ./sar_results --job_id KINASE_PILOT_V1 --accepted_manifest_hash 08e21cc1d66bcdec9382d4fcca0f82e7ada1d3e7b40638c969feb0156c0502da --rejected_manifest_hash 15e0ece528986b942644bc9efa8bfd55419c180eba1df53d26b613ed079b5caa",
+  "arguments": {
+    "manifest": "benchmark_v1.0.json",
+    "sar_dir": "./sar_results",
+    "job_id": "KINASE_PILOT_V1",
+    "accepted_manifest_hash": "08e21cc1d66bcdec9382d4fcca0f82e7ada1d3e7b40638c969feb0156c0502da",
+    "rejected_manifest_hash": "15e0ece528986b942644bc9efa8bfd55419c180eba1df53d26b613ed079b5caa"
+  },
+  "manifest_verification": {
+    "accepted_manifest_hash_expected": "08e21cc1d66bcdec9382d4fcca0f82e7ada1d3e7b40638c969feb0156c0502da",
+    "accepted_manifest_hash_actual": "08e21cc1d66bcdec9382d4fcca0f82e7ada1d3e7b40638c969feb0156c0502da",
+    "hash_match": true
+  },
+  "locked_parameters": {
+    "seed": 42,
+    "recycles": 3,
+    "schema_version": "1.0"
+  },
+  "outputs": {
+    "sar_summary": "sar_results/SAR_SUMMARY.md",
+    "calibration_report": "sar_results/calibration_report.json",
+    "execution_provenance": "sar_results/execution_provenance.json"
+  }
+}
