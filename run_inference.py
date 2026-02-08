@@ -41,8 +41,8 @@ def run_alphafold3_stub(pdb_id: str, seed: int, recycles: int, output_dir: Path)
     stub_coords = np.random.randn(n_residues, 3) * 10.0
 
     # Generate stub confidence metrics
-    plddt_scores = np.random.uniform(60, 95, n_residues)
-    pae_matrix = np.random.uniform(2, 15, (n_residues, n_residues))
+    plddt_scores = np.random.uniform(50 + (pdb_hash % 3) * 15, 70 + (pdb_hash % 3) * 15, n_residues)
+    pae_matrix = np.random.uniform(2 + (pdb_hash % 3) * 5, 7 + (pdb_hash % 3) * 5, (n_residues, n_residues))
 
     result = {
         "pdb_id": pdb_id,
