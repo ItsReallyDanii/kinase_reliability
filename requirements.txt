@@ -1,0 +1,15 @@
+# Kinase Reliability Pilot v1.0 - Python Dependencies
+
+# Core scientific computing
+numpy>=1.24.0,<2.0.0
+
+# JSON schema validation (optional, for SAR validation)
+jsonschema>=4.17.0
+
+# Structural biology tools (for production RMSD/alignment)
+# Note: These are optional - stub implementations work without them
+# biopython>=1.81
+# scipy>=1.10.0
+
+# Development/testing
+pytest>=7.3.0

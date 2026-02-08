@@ -1,0 +1,98 @@
+{
+  "version": "1.0",
+  "created": "2026-02-08T10:59:00Z",
+  "scope": "Kinase Reliability Pilot - Rejected Targets",
+  "rejection_reasons": "Failed inclusion criteria: resolution > 2.2Å, non-X-RAY methods, or release date outside range",
+  "targets": [
+    {
+      "pdb_id": "7AAA",
+      "resolution": 2.5,
+      "method": "X-RAY",
+      "release_date": "2024-04-10",
+      "ligand_present": true,
+      "kinase_family": "CMGC",
+      "rejection_reason": "Resolution > 2.2Å"
+    },
+    {
+      "pdb_id": "7BBB",
+      "resolution": 1.9,
+      "method": "CRYO-EM",
+      "release_date": "2024-06-15",
+      "ligand_present": false,
+      "kinase_family": "TK",
+      "rejection_reason": "Method is CRYO-EM, not X-RAY"
+    },
+    {
+      "pdb_id": "7CCC",
+      "resolution": 3.0,
+      "method": "X-RAY",
+      "release_date": "2025-02-20",
+      "ligand_present": true,
+      "kinase_family": "AGC",
+      "rejection_reason": "Resolution > 2.2Å"
+    },
+    {
+      "pdb_id": "7DDD",
+      "resolution": 2.0,
+      "method": "NMR",
+      "release_date": "2024-08-30",
+      "ligand_present": false,
+      "kinase_family": "CAMK",
+      "rejection_reason": "Method is NMR, not X-RAY"
+    },
+    {
+      "pdb_id": "7EEE",
+      "resolution": 2.8,
+      "method": "X-RAY",
+      "release_date": "2025-05-05",
+      "ligand_present": true,
+      "kinase_family": "TK",
+      "rejection_reason": "Resolution > 2.2Å"
+    },
+    {
+      "pdb_id": "7FFF",
+      "resolution": 1.8,
+      "method": "X-RAY",
+      "release_date": "2023-12-15",
+      "ligand_present": true,
+      "kinase_family": "STE",
+      "rejection_reason": "Release date before 2024-01-01"
+    },
+    {
+      "pdb_id": "7GGG",
+      "resolution": 2.4,
+      "method": "X-RAY",
+      "release_date": "2024-10-10",
+      "ligand_present": false,
+      "kinase_family": "CMGC",
+      "rejection_reason": "Resolution > 2.2Å"
+    },
+    {
+      "pdb_id": "7HHH",
+      "resolution": 1.95,
+      "method": "ELECTRON CRYSTALLOGRAPHY",
+      "release_date": "2025-01-20",
+      "ligand_present": true,
+      "kinase_family": "TK",
+      "rejection_reason": "Method not X-RAY"
+    },
+    {
+      "pdb_id": "7III",
+      "resolution": 3.2,
+      "method": "X-RAY",
+      "release_date": "2025-07-15",
+      "ligand_present": true,
+      "kinase_family": "AGC",
+      "rejection_reason": "Resolution > 2.2Å"
+    },
+    {
+      "pdb_id": "7JJJ",
+      "resolution": 2.1,
+      "method": "X-RAY",
+      "release_date": "2026-02-09",
+      "ligand_present": false,
+      "kinase_family": "TKL",
+      "rejection_reason": "Release date after 2026-02-08"
+    }
+  ]
+}
