@@ -1,0 +1,104 @@
+{
+  "version": "1.0",
+  "created": "2026-02-08T10:59:00Z",
+  "scope": "Kinase Reliability Pilot - Accepted Targets",
+  "inclusion_criteria": {
+    "method": "X-RAY",
+    "resolution_max": 2.2,
+    "release_date_min": "2024-01-01",
+    "release_date_max": "2026-02-08",
+    "protein_class": "kinase"
+  },
+  "targets": [
+    {
+      "pdb_id": "8ABC",
+      "resolution": 1.8,
+      "method": "X-RAY",
+      "release_date": "2024-03-15",
+      "ligand_present": true,
+      "kinase_family": "CMGC",
+      "description": "CDK2 with ATP-competitive inhibitor"
+    },
+    {
+      "pdb_id": "8DEF",
+      "resolution": 2.0,
+      "method": "X-RAY",
+      "release_date": "2024-05-20",
+      "ligand_present": true,
+      "kinase_family": "TK",
+      "description": "EGFR kinase domain with gefitinib"
+    },
+    {
+      "pdb_id": "8GHI",
+      "resolution": 1.9,
+      "method": "X-RAY",
+      "release_date": "2024-07-10",
+      "ligand_present": false,
+      "kinase_family": "AGC",
+      "description": "PKA catalytic subunit apo form"
+    },
+    {
+      "pdb_id": "8JKL",
+      "resolution": 2.1,
+      "method": "X-RAY",
+      "release_date": "2024-09-05",
+      "ligand_present": true,
+      "kinase_family": "CAMK",
+      "description": "CaMKII with staurosporine"
+    },
+    {
+      "pdb_id": "8MNO",
+      "resolution": 1.7,
+      "method": "X-RAY",
+      "release_date": "2024-11-12",
+      "ligand_present": true,
+      "kinase_family": "TK",
+      "description": "ABL1 kinase with imatinib"
+    },
+    {
+      "pdb_id": "8PQR",
+      "resolution": 2.2,
+      "method": "X-RAY",
+      "release_date": "2025-01-25",
+      "ligand_present": false,
+      "kinase_family": "CMGC",
+      "description": "MAP kinase ERK2 apo"
+    },
+    {
+      "pdb_id": "8STU",
+      "resolution": 1.95,
+      "method": "X-RAY",
+      "release_date": "2025-03-30",
+      "ligand_present": true,
+      "kinase_family": "STE",
+      "description": "MEK1 with allosteric inhibitor"
+    },
+    {
+      "pdb_id": "8VWX",
+      "resolution": 2.0,
+      "method": "X-RAY",
+      "release_date": "2025-06-15",
+      "ligand_present": true,
+      "kinase_family": "TK",
+      "description": "SRC kinase with dasatinib"
+    },
+    {
+      "pdb_id": "8YZA",
+      "resolution": 1.85,
+      "method": "X-RAY",
+      "release_date": "2025-09-20",
+      "ligand_present": false,
+      "kinase_family": "AGC",
+      "description": "AKT1 kinase apo form"
+    },
+    {
+      "pdb_id": "8BCD",
+      "resolution": 2.15,
+      "method": "X-RAY",
+      "release_date": "2025-12-10",
+      "ligand_present": true,
+      "kinase_family": "TKL",
+      "description": "BRAF with vemurafenib"
+    }
+  ]
+}
