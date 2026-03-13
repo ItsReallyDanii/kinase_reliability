@@ -5,7 +5,7 @@ of AlphaFold 3 predictions on kinase structures.
 
 ---
 
-## ⚠ Current Status: Level A — Engineering Groundwork (Phase 0/1)
+## ⚠ Current Status: Level A — Engineering Complete
 
 **AlphaFold 3 has NOT been run on any real targets yet.**
 This repository currently provides:
@@ -13,12 +13,11 @@ This repository currently provides:
 - Governance and schema infrastructure (real)
 - Pipeline scaffolding with stub/synthetic inference (real scaffold, synthetic outputs)
 - SAR schema enforcement and provenance tracking (real)
-- Real metric implementations (RMSD, contact map) for engineering validation (Phase 1 addition)
-- Real structure download and ligand extraction scripts (Phase 1 addition)
+- Real metric implementations (RMSD, contact map, ligand RMSD proxy) for engineering validation
+- Real structure download and ground truth extraction scripts
+- Level A Provisional Pilot Set (`benchmark/pilot_set_v1.json`) with downloaded structures and deterministic `structure_only` pipeline execution. Note that `8PAR` remains provisional.
 
-All benchmark IDs in `benchmark_v1.0.json` are **synthetic fixtures** for
-pipeline testing, not real scientific targets. See
-[docs/CURRENT_STATUS.md](docs/CURRENT_STATUS.md) for the full claims ledger.
+See [docs/CURRENT_STATUS.md](docs/CURRENT_STATUS.md) for the full claims ledger.
 
 ---
 
@@ -36,8 +35,8 @@ pipeline testing, not real scientific targets. See
 | Structure → ground-truth JSON bridge | **Implemented** | `scripts/build_ground_truth_json.py` |
 | `structure_only` pipeline path (end-to-end) | **Implemented** | download → build_ground_truth_json → generate_sar |
 | Real ligand extraction | **Implemented** | `scripts/extract_ligands.py`; requires Biopython |
-| Benchmark target metadata scaffold | **Scaffolded** | Format defined; pilot targets not yet finalized |
-| Real kinase benchmark targets (2024+) | **Not yet real** | Target selection for real pilot TBD |
+| Benchmark target metadata scaffold | **Implemented** | `benchmark/pilot_set_v1.json` |
+| Real kinase benchmark targets (2024+) | **Implemented** | Level A Provisional Pilot Set (10 targets; `8PAR` is provisional) |
 | AlphaFold 3 inference on real targets | **Not yet real** | AF3 integration not implemented |
 | Real calibration against AF3 outputs | **Not yet real** | Requires real inference first |
 | Scientific evaluation / paper claims | **Not yet real** | Phase 2+ scope |
@@ -53,7 +52,7 @@ gates and failure taxonomy classification.
 
 **Current Pipeline State:** Stub inference only (AF3 not integrated)
 **Schema State:** Locked v1.0
-**Benchmark Targets:** Synthetic fixtures (real target selection TBD)
+**Benchmark Targets:** Level A Provisional Pilot Set (`8PAR` provisional)
 
 ---
 

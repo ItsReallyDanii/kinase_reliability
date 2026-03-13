@@ -1,0 +1,69 @@
+{
+  "version": "1.0",
+  "created": "2026-03-13T00:00:00Z",
+  "scope": "Kinase Reliability Pilot - Level A Provisional",
+  "targets": [
+    {
+      "pdb_id": "9GNO",
+      "resolution": 1.16,
+      "release_year": "2025",
+      "description": "CDK2"
+    },
+    {
+      "pdb_id": "9CDY",
+      "resolution": 1.5,
+      "release_year": "2025",
+      "description": "DLK (MAP3K12)"
+    },
+    {
+      "pdb_id": "9CZW",
+      "resolution": 1.53,
+      "release_year": "2024",
+      "description": "HPK1"
+    },
+    {
+      "pdb_id": "9CZT",
+      "resolution": 1.69,
+      "release_year": "2024",
+      "description": "HPK1"
+    },
+    {
+      "pdb_id": "8S6I",
+      "resolution": 1.72,
+      "release_year": "2025",
+      "description": "CDKL2"
+    },
+    {
+      "pdb_id": "8UWN",
+      "resolution": 1.8,
+      "release_year": "2024",
+      "description": "CLK1"
+    },
+    {
+      "pdb_id": "8SC7",
+      "resolution": 1.98,
+      "release_year": "2024",
+      "description": "EGFR"
+    },
+    {
+      "pdb_id": "9C1W",
+      "resolution": 2.0,
+      "release_year": "2024",
+      "description": "AKT2"
+    },
+    {
+      "pdb_id": "9D00",
+      "resolution": 1.95,
+      "release_year": "2024",
+      "description": "HPK1"
+    },
+    {
+      "pdb_id": "8PAR",
+      "resolution": 2.0,
+      "release_year": "2024",
+      "description": "MAP4K1 / HPK1-family",
+      "provisional": true,
+      "uncertainty_note": "provisional / uncertain slot because MAP4K1 is HPK1-family and may or may not represent a meaningfully distinct structural/binding-mode case"
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 
 **Document type:** Truth-status claims ledger
 **Date:** 2026-03-13
-**Phase:** 0 (Repo Truth Cleanup) + 1 (Engineering Completion Foundation)
+**Phase:** Level A — Engineering Complete
 
 This document is the authoritative reference for what is real, what is
 scaffolded, and what remains for future phases. It should be updated whenever
@@ -15,14 +15,14 @@ the repository's capabilities change materially.
 | Statement | True? |
 |---|---|
 | AlphaFold 3 has been run on real kinase targets | **NO** |
-| The benchmark contains real PDB IDs | **NO** — all IDs in `benchmark_v1.0.json` are synthetic |
-| RMSD values in `sar_results/` reflect real structural comparisons | **NO** — stub outputs only |
+| The benchmark contains real PDB IDs | **YES** — `benchmark/pilot_set_v1.json` contains a Level A provisional pilot set |
+| RMSD values in `sar_results/` reflect real structural comparisons | **NO** — stub outputs only. `structure_only` runs generate valid proxy metrics. |
 | The SAR schema and governance scaffold are real | **YES** |
 | Real RMSD code (Kabsch/SVD) is implemented | **YES** (`metrics/rmsd.py`) |
 | Real contact map code is implemented | **YES** (`metrics/contact_map.py`) |
 | structure_only pipeline path runnable end-to-end | **YES** — download → build_ground_truth_json → generate_sar |
-| Real structures have been downloaded | **NO** — scripts ready; not yet run on real targets |
-| Real kinase benchmark targets have been selected | **NO** — format scaffolded; targets TBD |
+| Real structures have been downloaded | **YES** — for the provisional pilot set |
+| Real kinase benchmark targets have been selected | **YES** — Level A Provisional Pilot Set (10 targets, `8PAR` provisional) |
 
 ---
 
@@ -47,8 +47,9 @@ the repository's capabilities change materially.
   - `compute_contact_map(coords, threshold=8.0)` — binary C-alpha contact matrix
   - `compute_contact_map_overlap(map_a, map_b)` — Jaccard overlap
 
-#### Structure Ingestion Scripts (Phase 1)
+#### Structure Ingestion Scripts (Phase 1/Level A)
 - `scripts/download_structures.py`: Downloads mmCIF/PDB files from RCSB REST API
+  - Fetched the 10 pilot structures to `pdb_ground_truth/`
   - Fails loudly on invalid IDs (HTTP 404)
   - Validates PDB ID format before requesting
   - Writes to predictable output paths
@@ -56,18 +57,18 @@ the repository's capabilities change materially.
   - Uses Biopython MMCIF parser
   - Outputs ligand inventory JSON
   - Excludes solvent (HOH, WAT) and common buffers by default
-- `scripts/build_ground_truth_json.py`: Bridges downloaded structures → SAR pipeline (Phase 1 addition)
+- `scripts/build_ground_truth_json.py`: Bridges downloaded structures → SAR pipeline
   - Parses .cif / .pdb with Biopython; first model only
   - Extracts C-alpha coordinates for all (or specified) chains, in chain-then-sequence order
   - Writes `{PDB_ID}_ground_truth.json` with `coordinates` key consumed by `generate_sar.py`
   - No randomness; fails loudly on missing/malformed CA atoms
   - Completes the `structure_only` end-to-end path
 
-#### Benchmark Metadata Format (Phase 1)
-- `benchmark/metadata/kinase_pilot_targets.json`: Format defined with fields:
-  - `pdb_id`, `kinase_name`, `kinase_family`, `experimental_method`, `resolution_A`
-  - `ligand_name`, `ligand_code`, `release_date`, `inclusion_status`, `split`
-  - `notes`, `engineering_test_fixture` flag
+#### Benchmark Metadata Format (Level A)
+- `benchmark/pilot_set_v1.json`: Format defined with fields:
+  - `pdb_id`, `resolution`, `release_year`, `description`
+  - Contains precisely 10 Level A provisional IDs
+  - Explicit provisional support (`provisional`: `true`) preserved for 8PAR.
 
 ---
 
@@ -109,10 +110,7 @@ the repository's capabilities change materially.
 ### ❌ Not Yet Real (Future Phases)
 
 #### Phase 2 Prerequisites
-- Real kinase target selection (2024-01-01 to 2026-02-08 release window)
-  - Inclusion criteria defined; actual target list TBD
-  - `benchmark/metadata/kinase_pilot_targets.json` has placeholder entries
-- Download and validation of real ground truth structures
+- Resolving the provisional status of real kinase pilot target `8PAR`
 - AF3 integration (`af3_available = True` in `run_inference.py`)
 - Real inference outputs in `sar_results_raw/`
 - SAR generation from real AF3 coordinates vs real crystal structures
@@ -160,12 +158,8 @@ Any SAR without both fields should be treated as synthetic until verified.
 
 ## What Is Needed to Reach Phase 2
 
-1. **Target selection**: Identify ≥10 real kinase PDB structures meeting criteria
-   - X-RAY, resolution ≤ 2.2Å, released 2024-01-01 to 2026-02-08
-   - Populate `benchmark/metadata/kinase_pilot_targets.json` with real entries
-   - Update `benchmark_v1.0.json` (requires new authorization + hash update)
-
-2. **Ground truth download and preparation**: Run with real IDs (scripts are ready):
+1. **Target selection**: Solidify provisional targets (i.e. resolve `8PAR`).
+2. **Ground truth preparation**: Ground truth for all targets exists in `pdb_ground_truth/`.
    ```bash
    python3 scripts/download_structures.py --pdb_ids <IDS> --output_dir benchmark/ground_truth
    python3 scripts/build_ground_truth_json.py --structure_dir benchmark/ground_truth --output_dir benchmark/ground_truth

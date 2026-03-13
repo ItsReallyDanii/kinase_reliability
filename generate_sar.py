@@ -130,6 +130,18 @@ def _real_contact_map_overlap(pred_coords: List[List[float]],
     return compute_contact_map_overlap(map_pred, map_gt)
 
 
+def _real_rmsd_ligand(pred_coords: List[List[float]],
+                      gt_coords: List[List[float]]) -> float:
+    """Real ligand pocket proxy RMSD."""
+    try:
+        from metrics.ligand_rmsd import compute_ligand_pocket_rmsd
+    except ImportError as exc:
+        raise ImportError(
+            "metrics.ligand_rmsd not importable."
+        ) from exc
+    return compute_ligand_pocket_rmsd(pred_coords, gt_coords)
+
+
 # ---------------------------------------------------------------------------
 # Confidence classification
 # ---------------------------------------------------------------------------
@@ -473,8 +485,13 @@ def generate_sar(target: Dict[str, Any], prediction: Dict[str, Any],
             prediction["coordinates"],
             ground_truth["coordinates"]
         )
-        # Ligand pocket RMSD: not yet implemented for structure_only mode
-        rmsd_ligand_pocket = "N/A"
+        if ligand_present:
+            rmsd_ligand_pocket = _real_rmsd_ligand(
+                prediction["coordinates"],
+                ground_truth["coordinates"]
+            )
+        else:
+            rmsd_ligand_pocket = "N/A"
         contact_map_overlap = _real_contact_map_overlap(
             prediction["coordinates"],
             ground_truth["coordinates"]
