@@ -20,7 +20,8 @@ the repository's capabilities change materially.
 | The SAR schema and governance scaffold are real | **YES** |
 | Real RMSD code (Kabsch/SVD) is implemented | **YES** (`metrics/rmsd.py`) |
 | Real contact map code is implemented | **YES** (`metrics/contact_map.py`) |
-| Real structures have been downloaded | **NO** — download scripts provided but not yet run |
+| structure_only pipeline path runnable end-to-end | **YES** — download → build_ground_truth_json → generate_sar |
+| Real structures have been downloaded | **NO** — scripts ready; not yet run on real targets |
 | Real kinase benchmark targets have been selected | **NO** — format scaffolded; targets TBD |
 
 ---
@@ -55,6 +56,12 @@ the repository's capabilities change materially.
   - Uses Biopython MMCIF parser
   - Outputs ligand inventory JSON
   - Excludes solvent (HOH, WAT) and common buffers by default
+- `scripts/build_ground_truth_json.py`: Bridges downloaded structures → SAR pipeline (Phase 1 addition)
+  - Parses .cif / .pdb with Biopython; first model only
+  - Extracts C-alpha coordinates for all (or specified) chains, in chain-then-sequence order
+  - Writes `{PDB_ID}_ground_truth.json` with `coordinates` key consumed by `generate_sar.py`
+  - No randomness; fails loudly on missing/malformed CA atoms
+  - Completes the `structure_only` end-to-end path
 
 #### Benchmark Metadata Format (Phase 1)
 - `benchmark/metadata/kinase_pilot_targets.json`: Format defined with fields:
@@ -74,7 +81,7 @@ the repository's capabilities change materially.
 
 - `generate_sar.py`: SAR generation logic is real; metrics currently stub by default
   - Stub path: active when `prediction["stub_output"] == True` (default)
-  - Real metric path: active when `--metrics_mode real_structure` and ground truth available
+  - Real metric path: active when `--metrics_mode structure_only` and ground truth JSON available
   - Random values (`np.random.uniform`) are **isolated behind explicit stub guard**
   - Provenance records `metrics_status` field
 
@@ -158,9 +165,12 @@ Any SAR without both fields should be treated as synthetic until verified.
    - Populate `benchmark/metadata/kinase_pilot_targets.json` with real entries
    - Update `benchmark_v1.0.json` (requires new authorization + hash update)
 
-2. **Ground truth download**: Run `scripts/download_structures.py` with real IDs
-   - Store mmCIF files in `benchmark/ground_truth/`
-   - Run `scripts/extract_ligands.py` to populate ligand inventory
+2. **Ground truth download and preparation**: Run with real IDs (scripts are ready):
+   ```bash
+   python3 scripts/download_structures.py --pdb_ids <IDS> --output_dir benchmark/ground_truth
+   python3 scripts/build_ground_truth_json.py --structure_dir benchmark/ground_truth --output_dir benchmark/ground_truth
+   python3 scripts/extract_ligands.py --structure_dir benchmark/ground_truth --output_file benchmark/metadata/ligand_inventory.json
+   ```
 
 3. **AF3 integration**: Set `af3_available = True` in `run_inference.py`
    - Implement `run_alphafold3()` with real AF3 API/CLI calls

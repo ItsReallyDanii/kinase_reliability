@@ -33,6 +33,8 @@ pipeline testing, not real scientific targets. See
 | Real RMSD (Kabsch/SVD) | **Implemented** | `metrics/rmsd.py`; requires Biopython/numpy |
 | Real contact map (distance-based) | **Implemented** | `metrics/contact_map.py` |
 | Real structure download (RCSB) | **Implemented** | `scripts/download_structures.py` |
+| Structure → ground-truth JSON bridge | **Implemented** | `scripts/build_ground_truth_json.py` |
+| `structure_only` pipeline path (end-to-end) | **Implemented** | download → build_ground_truth_json → generate_sar |
 | Real ligand extraction | **Implemented** | `scripts/extract_ligands.py`; requires Biopython |
 | Benchmark target metadata scaffold | **Scaffolded** | Format defined; pilot targets not yet finalized |
 | Real kinase benchmark targets (2024+) | **Not yet real** | Target selection for real pilot TBD |
@@ -85,13 +87,15 @@ kinase_reliability/
 ├── scripts/
 │   ├── generate_manifest.py               # Manifest generation utility
 │   ├── download_structures.py             # Download real structures from RCSB
+│   ├── build_ground_truth_json.py         # Convert .cif/.pdb → ground_truth JSON (bridge)
 │   └── extract_ligands.py                 # Extract ligand metadata from structures
 │
 ├── tests/
 │   ├── test_rmsd_controls.py              # Identity / perturbation / mismatch controls
 │   ├── test_contact_map.py                # Contact map determinism controls
 │   ├── test_metadata.py                   # Benchmark metadata schema validation
-│   └── test_sar_provenance.py             # SAR synthetic-vs-real status labeling
+│   ├── test_sar_provenance.py             # SAR synthetic-vs-real status labeling
+│   └── test_build_ground_truth.py         # Bridge script end-to-end controls
 │
 ├── schemas/
 │   └── sar_schema_v1.json                 # SAR JSON schema (locked)
@@ -123,20 +127,45 @@ any model inference:
 pytest tests/ -v
 ```
 
-### Download Real Structures (Engineering Validation)
+### Download Real Structures and Run in structure_only Mode
 
 ```bash
-# Download known kinase structures for pipeline testing
+# 1. Download known kinase structures
 python3 scripts/download_structures.py \
-  --pdb_ids 1ATP 2ITO \
+  --pdb_ids 1ATP 2ITO 1IEP \
   --output_dir benchmark/ground_truth \
   --format mmcif
 
-# Extract ligand metadata
+# 2. Convert to ground-truth JSON (the bridge step)
+python3 scripts/build_ground_truth_json.py \
+  --structure_dir benchmark/ground_truth \
+  --output_dir benchmark/ground_truth
+
+# 3. Extract ligand metadata
 python3 scripts/extract_ligands.py \
   --structure_dir benchmark/ground_truth \
   --output_file benchmark/metadata/ligand_inventory.json
+
+# 4. Run stub inference against the real PDB IDs
+#    (requires a manifest listing those IDs — use benchmark/metadata/ entries
+#    or create a local manifest; see docs/CURRENT_STATUS.md)
+
+# 5. Generate SARs with real structural metrics
+python3 generate_sar.py \
+  --manifest <your_manifest.json> \
+  --pred_dir ./sar_results_raw \
+  --ground_truth_dir benchmark/ground_truth \
+  --output_dir ./sar_results \
+  --schema_version 1.0 \
+  --metrics_mode structure_only \
+  --strict_mode
 ```
+
+**Note:** Step 4 currently uses stub inference (`stub_output: false` is not
+available until AF3 is integrated). In the meantime, `structure_only` mode
+validates the metric pipeline with real coordinates against themselves or
+a deliberately perturbed copy — useful for confirming RMSD ≈ 0 on identity
+comparisons before any model is run.
 
 ### Run Full Pipeline on Synthetic Fixtures
 
