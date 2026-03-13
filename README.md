@@ -1,57 +1,161 @@
-# Kinase Reliability Pilot v1.0
+# Kinase Reliability Pilot
 
-Computational audit framework for AlphaFold 3 predictions on kinase structures.
+Governance, schema, and provenance scaffold for a planned computational audit
+of AlphaFold 3 predictions on kinase structures.
 
-## Overview
+---
 
-The Kinase Reliability Pilot executes a locked, reproducible benchmark to evaluate AlphaFold 3 performance on 10 high-quality kinase crystal structures. The pipeline generates Structural Audit Reports (SARs) with mandatory decision gates and failure taxonomy classification.
+## ⚠ Current Status: Level A — Engineering Groundwork (Phase 0/1)
 
-**State:** EXECUTE (locked)
-**Version:** 1.0
-**Timestamp:** 2026-02-08T10:59:00Z
+**AlphaFold 3 has NOT been run on any real targets yet.**
+This repository currently provides:
 
-## Key Features
+- Governance and schema infrastructure (real)
+- Pipeline scaffolding with stub/synthetic inference (real scaffold, synthetic outputs)
+- SAR schema enforcement and provenance tracking (real)
+- Real metric implementations (RMSD, contact map) for engineering validation (Phase 1 addition)
+- Real structure download and ligand extraction scripts (Phase 1 addition)
 
-- **Locked Configuration**: Seed=42, Recycles=3 (immutable)
-- **Strict SAR Schema**: Enforces `expected_error_range`, `recommended_action`, `decision_gate ∈ {ACCEPT, REVIEW, REJECT}`
-- **Failure Taxonomy**: Classes A/B/C for systematic error characterization
-- **Integrity Verification**: SHA-256 checksums for all manifests and artifacts
-- **Provenance Tracking**: Full runtime configuration and command history
+All benchmark IDs in `benchmark_v1.0.json` are **synthetic fixtures** for
+pipeline testing, not real scientific targets. See
+[docs/CURRENT_STATUS.md](docs/CURRENT_STATUS.md) for the full claims ledger.
 
-## Scope
+---
 
-- **n=10 targets**: X-RAY structures, resolution ≤ 2.2Å, released 2024-01-01 to 2026-02-08
-- **Protein class**: Kinases across CMGC, TK, AGC, CAMK, STE, TKL families
-- **Constraints**: No wet-lab efficacy claims; results bounded to computational audit scope
+## Claims Ledger
+
+| Capability | Status | Notes |
+|---|---|---|
+| Governance / schema / provenance scaffold | **Implemented** | SAR schema v1.0, locked params, audit trail |
+| SAR required-field enforcement (`decision_gate`, etc.) | **Implemented** | strict_mode validation |
+| Pipeline orchestration (integrity → inference → SAR → report) | **Scaffolded** | Uses stub inference; real AF3 not integrated |
+| Stub/synthetic inference runner | **Scaffolded** | Deterministic stubs only; `stub_output: true` in provenance |
+| Real RMSD (Kabsch/SVD) | **Implemented** | `metrics/rmsd.py`; requires Biopython/numpy |
+| Real contact map (distance-based) | **Implemented** | `metrics/contact_map.py` |
+| Real structure download (RCSB) | **Implemented** | `scripts/download_structures.py` |
+| Real ligand extraction | **Implemented** | `scripts/extract_ligands.py`; requires Biopython |
+| Benchmark target metadata scaffold | **Scaffolded** | Format defined; pilot targets not yet finalized |
+| Real kinase benchmark targets (2024+) | **Not yet real** | Target selection for real pilot TBD |
+| AlphaFold 3 inference on real targets | **Not yet real** | AF3 integration not implemented |
+| Real calibration against AF3 outputs | **Not yet real** | Requires real inference first |
+| Scientific evaluation / paper claims | **Not yet real** | Phase 2+ scope |
+
+---
+
+## Project Overview
+
+The Kinase Reliability Pilot intends to execute a locked, reproducible benchmark
+evaluating AlphaFold 3 performance on high-quality kinase crystal structures.
+The pipeline generates Structural Audit Reports (SARs) with mandatory decision
+gates and failure taxonomy classification.
+
+**Current Pipeline State:** Stub inference only (AF3 not integrated)
+**Schema State:** Locked v1.0
+**Benchmark Targets:** Synthetic fixtures (real target selection TBD)
+
+---
+
+## Repository Structure
+
+```
+kinase_reliability/
+├── README.md                              # This file
+├── CLAUDE.md                              # AI assistant development guide
+├── EXECUTION_CONTROL_DOCUMENT_LOCKED.md  # Formal execution specification (locked)
+│
+├── run_inference.py                       # AF3 inference runner (stub mode only)
+├── generate_sar.py                        # SAR generator (real metrics + stub paths)
+├── compile_reports.py                     # Report compiler
+│
+├── benchmark_v1.0.json                    # [SYNTHETIC FIXTURE] Pipeline test manifest
+├── benchmark_v1.0_rejected.json           # [SYNTHETIC FIXTURE] Rejection examples
+│
+├── benchmark/
+│   ├── synthetic/                         # Clearly labeled synthetic fixtures
+│   │   └── README.md                      # Explains synthetic nature
+│   ├── metadata/
+│   │   └── kinase_pilot_targets.json      # Real benchmark metadata scaffold (TBD)
+│   ├── targets/                           # Future: real target structures
+│   └── ground_truth/                      # Future: downloaded ground truth
+│
+├── metrics/
+│   ├── rmsd.py                            # Real Kabsch/SVD RMSD (no randomness)
+│   └── contact_map.py                     # Real distance-based contact maps
+│
+├── scripts/
+│   ├── generate_manifest.py               # Manifest generation utility
+│   ├── download_structures.py             # Download real structures from RCSB
+│   └── extract_ligands.py                 # Extract ligand metadata from structures
+│
+├── tests/
+│   ├── test_rmsd_controls.py              # Identity / perturbation / mismatch controls
+│   ├── test_contact_map.py                # Contact map determinism controls
+│   ├── test_metadata.py                   # Benchmark metadata schema validation
+│   └── test_sar_provenance.py             # SAR synthetic-vs-real status labeling
+│
+├── schemas/
+│   └── sar_schema_v1.json                 # SAR JSON schema (locked)
+├── internal/
+│   └── manifest_checksums.sha256          # Integrity checksums
+├── docs/
+│   ├── EXECUTION_CONTROL_DOCUMENT.md      # Execution specification
+│   └── CURRENT_STATUS.md                  # Truth-status claims ledger
+├── pdb_ground_truth/                      # Legacy ground truth dir (use benchmark/ground_truth/)
+└── sar_results/                           # Generated outputs (synthetic fixture run)
+```
+
+---
 
 ## Quick Start
 
 ### Installation
 
 ```bash
-# Clone repository
-git clone <repository-url>
-cd kinase_reliability
-
-# Install dependencies
 pip install -r requirements.txt
 ```
 
-### Execution (4-Step Pipeline)
+### Run Metric Validation Controls
+
+Validates that real RMSD and contact map implementations are correct before
+any model inference:
+
+```bash
+pytest tests/ -v
+```
+
+### Download Real Structures (Engineering Validation)
+
+```bash
+# Download known kinase structures for pipeline testing
+python3 scripts/download_structures.py \
+  --pdb_ids 1ATP 2ITO \
+  --output_dir benchmark/ground_truth \
+  --format mmcif
+
+# Extract ligand metadata
+python3 scripts/extract_ligands.py \
+  --structure_dir benchmark/ground_truth \
+  --output_file benchmark/metadata/ligand_inventory.json
+```
+
+### Run Full Pipeline on Synthetic Fixtures
+
+**Note:** This runs on synthetic PDB IDs with stub inference only.
+Outputs are NOT real scientific results.
 
 ```bash
 # 1. Verify manifest integrity
 sha256sum -c internal/manifest_checksums.sha256
 
-# 2. Run AF3 inference (locked config)
+# 2. Run stub inference (NOT real AF3)
 python3 run_inference.py \
   --manifest benchmark_v1.0.json \
-  --model_version af3_prod \
+  --model_version af3_stub \
   --seed 42 \
   --recycles 3 \
   --output_dir ./sar_results_raw
 
-# 3. Generate SARs (strict schema)
+# 3. Generate SARs (stub metrics path)
 python3 generate_sar.py \
   --manifest benchmark_v1.0.json \
   --pred_dir ./sar_results_raw \
@@ -60,70 +164,50 @@ python3 generate_sar.py \
   --schema_version 1.0 \
   --strict_mode
 
-# 4. Compile reports (calibration + provenance)
+# 4. Compile reports
 python3 compile_reports.py \
   --manifest benchmark_v1.0.json \
   --sar_dir ./sar_results \
-  --job_id KINASE_PILOT_V1 \
+  --job_id SYNTHETIC_TEST_RUN \
   --accepted_manifest_hash f26949fb43663df0c2d8d2f4f9b05f4f9edc58c53a0d7389ba49aa7e4b182218 \
   --rejected_manifest_hash 724ffdde4439c8bb99e5a81f770971f69b61197e0af56bfea4c7509c0a28fd7c
 ```
 
-## Directory Structure
+---
 
-```
-kinase_reliability/
-├── benchmark_v1.0.json              # Accepted targets manifest (n=10)
-├── benchmark_v1.0_rejected.json     # Rejected targets manifest
-├── run_inference.py                 # AF3 inference runner
-├── generate_sar.py                  # SAR generator
-├── compile_reports.py               # Report compiler
-├── requirements.txt                 # Python dependencies
-├── .gitignore                       # Git ignore patterns
-├── README.md                        # This file
-├── CLAUDE.md                        # Development guide
-├── internal/
-│   └── manifest_checksums.sha256    # Integrity checksums
-├── scripts/
-│   └── generate_manifest.py         # Manifest generation utility
-├── schemas/
-│   └── sar_schema_v1.json          # SAR JSON schema
-├── sar_results/                     # SAR outputs (generated)
-├── pdb_ground_truth/                # Ground truth structures (user-provided)
-└── docs/
-    └── EXECUTION_CONTROL_DOCUMENT.md # Locked execution specification
-```
+## Synthetic Fixture Warning
 
-## Outputs
+The default manifests (`benchmark_v1.0.json`, `benchmark_v1.0_rejected.json`)
+use **synthetic PDB IDs** (e.g., `8ABC`, `8DEF`) that do not correspond to
+real deposited structures. They exist solely to test pipeline mechanics.
 
-### Per-Target SARs (`sar_results/<pdb_id>.json`)
+- Do NOT cite outputs from these fixtures as scientific results
+- Do NOT treat decision gates or RMSD values from stub runs as real AF3 evaluations
+- The `sar_results/` directory in this repository contains outputs of a synthetic fixture run
 
-Each SAR contains:
-- **Metrics**: RMSD (global, ligand pocket), contact map overlap, pLDDT, PAE
-- **Confidence Assessment**: High/medium/low bins for pLDDT and PAE
-- **Expected Error Range**: RMSD bounds based on confidence (REQUIRED)
-- **Recommended Action**: Actionable guidance (REQUIRED)
-- **Decision Gate**: ACCEPT/REVIEW/REJECT (REQUIRED)
-- **Failure Taxonomy**: Class A/B/C/Unknown/N/A classification
-- **Provenance**: Model version, seed, recycles, stub flag
+See `benchmark/synthetic/README.md` for details.
 
-### Summary Reports (`sar_results/`)
+---
 
-- **SAR_SUMMARY.md**: Decision gate counts, failure taxonomy distribution, per-target table
-- **calibration_report.json**: Confidence-vs-error bands (≥3 bins required)
-- **execution_provenance.json**: Full command line, timestamps, manifest hashes
+## SAR Schema
 
-## PASS/FAIL Criteria
+Every SAR must contain three required fields:
 
-| Deliverable    | PASS Criteria                                      | FAIL Condition                     |
-|----------------|----------------------------------------------------|------------------------------------|
-| Integrity      | All 3 artifact hashes match authorization record   | Any hash mismatch                  |
-| Completeness   | 10/10 targets processed                            | Any target missing from sar_results/ |
-| SAR Validity   | 100% of SARs contain decision_gate                | Any SAR field missing or null      |
-| Calibration    | calibration_report.json has ≥3 confidence bins    | <3 bins or missing error distribution |
-| Provenance     | execution_provenance.json includes full command   | Missing provenance file            |
+| Field | Type | Constraint |
+|---|---|---|
+| `expected_error_range` | object | `rmsd_min`, `rmsd_max`, `rationale` all required |
+| `recommended_action` | string | Non-empty |
+| `decision_gate` | enum | `ACCEPT` \| `REVIEW` \| `REJECT` |
 
-## Failure Taxonomy
+Missing any field → `ERROR_SAR_INCOMPLETE` (hard stop in strict mode).
+
+### Decision Gates
+
+- **ACCEPT**: RMSD within expected range → proceed with downstream analysis
+- **REVIEW**: Moderate failures or unclear modes → manual expert review required
+- **REJECT**: Critical failures (overconfidence, symmetry) → do not use without refinement
+
+### Failure Taxonomy
 
 - **Class A**: Overconfidence artifact (high confidence, high error)
 - **Class B**: Ligand pose failure (ligand RMSD >> global RMSD)
@@ -131,41 +215,36 @@ Each SAR contains:
 - **Unknown**: Unmapped failure mode
 - **N/A**: No failure detected (within expected error range)
 
-## Decision Gates
-
-- **ACCEPT**: Prediction within expected error range → proceed with downstream analysis
-- **REVIEW**: Moderate failures or unclear modes → manual expert review required
-- **REJECT**: Critical failures (overconfidence, symmetry) → do not use without refinement
+---
 
 ## Locked Parameters
 
-- **Seed**: 42 (fixed for reproducibility)
-- **Recycles**: 3 (fixed for fair comparison)
+These values are frozen for the benchmark and must not be modified without
+explicit re-authorization:
+
+- **Seed**: 42
+- **Recycles**: 3
 - **Schema Version**: 1.0
-- **Manifest Hashes**:
-  - Accepted: `f26949fb43663df0c2d8d2f4f9b05f4f9edc58c53a0d7389ba49aa7e4b182218`
-  - Rejected: `724ffdde4439c8bb99e5a81f770971f69b61197e0af56bfea4c7509c0a28fd7c`
 
-## Stub Mode (AF3 Unavailable)
+See `EXECUTION_CONTROL_DOCUMENT_LOCKED.md` for the full governance specification.
 
-If AlphaFold 3 is unavailable, the pipeline generates deterministic stub outputs:
-- Reproducible pseudo-predictions based on `pdb_id` hash and `seed`
-- SAR provenance includes `stub_output: true` flag
-- Enables end-to-end pipeline testing without AF3 installation
+---
+
+## What Remains for Phase 2+
+
+1. Real kinase target selection (2024+ PDB structures meeting inclusion criteria)
+2. AlphaFold 3 integration (`af3_available = True` in `run_inference.py`)
+3. Real ground truth structure ingestion into `benchmark/ground_truth/`
+4. End-to-end pipeline run with real inference outputs
+5. Calibration analysis against real AF3 confidence metrics
+6. Scientific interpretation of results
+
+---
 
 ## Governance
 
-All changes to manifests, schemas, and locked parameters require explicit authorization. See `docs/EXECUTION_CONTROL_DOCUMENT.md` for the formal specification.
-
-## Citation
-
-If you use this pilot in your work, please cite:
-
-```
-Kinase Reliability Pilot v1.0 (2026)
-Computational audit framework for AlphaFold 3 kinase predictions
-https://github.com/<repository-url>
-```
+All changes to manifests, schemas, and locked parameters require explicit
+authorization. See `docs/EXECUTION_CONTROL_DOCUMENT.md`.
 
 ## License
 
